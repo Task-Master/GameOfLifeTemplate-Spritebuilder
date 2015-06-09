@@ -67,6 +67,18 @@ static const int GRID_COLUMNS = 10;
         
         y += _cellHeight;
     }
+    
+    - (void)touchBegan:(CCTouch *)touch withEvent:(CCTouchEvent *)event
+    {
+        // Get the x,y coordinates of the touch.
+        CGPoint touchLocation = [touch locationInNode:self];
+        
+        // Get the Creature at that location.
+        Creature *creature = [self creatureForTouchPosition:touchLocation];
+        
+        // Invert its state - kill it if it's alove, bring it to life if it's dead.
+        creature.isAlive = !creature.isAlive;
+    }
 }
 @end
 
