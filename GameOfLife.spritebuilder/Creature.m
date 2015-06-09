@@ -34,6 +34,9 @@
     - (Creature *)creatureForTouchPosition:(CGPoint)touchPosition
     {
         // Get the row and column that was touched, return the Creature inside the corresponding cell.
+        row = touchPosition.y / cellHeight;
+        column = touchPosition.x / cellWidth;
+        return _gridArray[row][column]
     }
 }
 @end
