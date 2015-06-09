@@ -29,43 +29,44 @@ static const int GRID_COLUMNS = 10;
         self.userInteractionEnabled = YES;
     }
     
-    - (void)setupGrid
+}
+
+- (void)setupGrid
+{
+    // Divide the grid's size by the number of columns/rows to figure out the right width and height of each cell.
+    _cellWidth = self.contentSize.width / GRID_COLUMNS;
+    _cellHeight = self.contentSize.height / GRID_ROWS;
+    
+    float x = 0;
+    float y = 0;
+    
+    // Initialize the array as a blank NSMutableArray.
+    _gridArray = [NSMutableArray array];
+    
+    // Initialize Creatures
+    for (int i = 0; i < GRID_ROWS; i++)
     {
-        // Divide the grid's size by the number of columns/rows to figure out the right width and height of each cell.
-        _cellWidth = self.contentSize.width / GRID_COLUMNS;
-        _cellHeight = self.contentSize.height / GRID_ROWS;
+        // This is how you create two dimensional arrays in Objective-C.  You put arrays into arrays.
+        _gridArray[i] = [NSMutableArray array];
+        x = 0;
         
-        float x = 0;
-        float y = 0;
-        
-        // Initialize the array as a blank NSMutableArray.
-        _gridArray = [NSMutableArray array];
-        
-        // Initialize Creatures
-        for (int i = 0; i < GRID_ROWS; i++)
+        for (int j = 0; j < GRID_COLUMNS; j++)
         {
-            // This is how you create two dimensional arrays in Objective-C.  You put arrays into arrays.
-            _gridArray[i] = [NSMutableArray array];
-            x = 0;
+            Creature *creature = [[Creature alloc] initCreature];
+            creature.anchorPoint = ccp(0, 0);
+            creature.position = ccp(x, y);
+            [self addChild:creature];
             
-            for (int j = 0; j < GRID_COLUMNS; j++)
-            {
-                Creature *creature = [[Creature alloc] initCreature];
-                creature.anchorPoint = ccp(0, 0);
-                creature.position = ccp(x, y);
-                [self addChild:creature];
-                
-                // This is shorthand to access an array inside an array.
-                _gridArray[i][j] = creature;
-                
-                // Make creatures visible to test this method, remove this once we know we have filled the grid properly.
-                creature.isAlive = YES;
-                
-                x += _cellWidth;
-            }
+            // This is shorthand to access an array inside an array.
+            _gridArray[i][j] = creature;
             
-            y += _cellHeight;
+            // Make creatures visible to test this method, remove this once we know we have filled the grid properly.
+            creature.isAlive = YES;
+            
+            x += _cellWidth;
         }
+        
+        y += _cellHeight;
     }
 }
 @end
