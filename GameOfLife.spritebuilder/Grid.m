@@ -18,66 +18,66 @@ static const int GRID_COLUMNS = 10;
     NSMutableArray *_gridArray;
     float _cellWidth;
     float _cellHeight;
-}
 
-- (void)onEnter
-{
-    [super onEnter];
-    
-    [self setupGrid];
-    
-    // Accept touches on the grid
-    self.userInteractionEnabled = YES;
-}
-
-- (void)setupGrid
-{
-    // Divide the grid's size by the number of columns/rows to figure out the right width and height of each cell.
-    _cellWidth = self.contentSize.width / GRID_COLUMNS;
-    _cellHeight = self.contentSize.height / GRID_ROWS;
-    
-    float x = 0;
-    float y = 0;
-    
-    // Initialize the array as a blank NSMutableArray.
-    _gridArray = [NSMutableArray array];
-    
-    // Initialize Creatures
-    for (int i = 0; i < GRID_ROWS; i++)
+    - (void)onEnter
     {
-        // This is how you create two dimensional arrays in Objective-C.  You put arrays into arrays.
-        _gridArray[i] = [NSMutableArray array];
-        x = 0;
-        
-        for (int j = 0; j < GRID_COLUMNS; j++)
-        {
-            Creature *creature = [[Creature alloc] initCreature];
-            creature.anchorPoint = ccp(0, 0);
-            creature.position = ccp(x, y);
-            [self addChild:creature];
-            
-            // This is shorthand to access an array inside an array.
-            _gridArray[i][j] = creature;
-            
-            // Make creatures visible to test this method, remove this once we know we have filled the grid properly.
-            // creature.isAlive = YES;
-            
-            x += _cellWidth;
-        }
-        
-        y += _cellHeight;
+        [super onEnter];
+    
+        [self setupGrid];
+    
+        // Accept touches on the grid
+        self.userInteractionEnabled = YES;
     }
-    
-    - (void)touchBegan:(CCTouch *)touch withEvent:(CCTouchEvent *)event
+
+    - (void)setupGrid
     {
-        // Get the x,y coordinates of the touch.
-        CGPoint touchLocation = [touch locationInNode:self];
+        // Divide the grid's size by the number of columns/rows to figure out the right width and height of each cell.
+        _cellWidth = self.contentSize.width / GRID_COLUMNS;
+        _cellHeight = self.contentSize.height / GRID_ROWS;
+    
+        float x = 0;
+        float y = 0;
+    
+        // Initialize the array as a blank NSMutableArray.
+        _gridArray = [NSMutableArray array];
+    
+        // Initialize Creatures
+        for (int i = 0; i < GRID_ROWS; i++)
+        {
+            // This is how you create two dimensional arrays in Objective-C.  You put arrays into arrays.
+            _gridArray[i] = [NSMutableArray array];
+            x = 0;
         
-        // Get the Creature at that location.
-        Creature *creature = [self creatureForTouchPosition:touchLocation];
+            for (int j = 0; j < GRID_COLUMNS; j++)
+            {
+                Creature *creature = [[Creature alloc] initCreature];
+                creature.anchorPoint = ccp(0, 0);
+                creature.position = ccp(x, y);
+                [self addChild:creature];
+            
+                // This is shorthand to access an array inside an array.
+                _gridArray[i][j] = creature;
+            
+                // Make creatures visible to test this method, remove this once we know we have filled the grid properly.
+                // creature.isAlive = YES;
+            
+                x += _cellWidth;
+            }
         
-        // Invert its state - kill it if it's alove, bring it to life if it's dead.
-        creature.isAlive = !creature.isAlive;
+            y += _cellHeight;
+        }
+    
+        - (void)touchBegan:(CCTouch *)touch withEvent:(CCTouchEvent *)event
+        {
+            // Get the x,y coordinates of the touch.
+            CGPoint touchLocation = [touch locationInNode:self];
+        
+            // Get the Creature at that location.
+            Creature *creature = [self creatureForTouchPosition:touchLocation];
+        
+            // Invert its state - kill it if it's alove, bring it to life if it's dead.
+            creature.isAlive = !creature.isAlive;
+        }
     }
 }
 @end
